@@ -1,4 +1,6 @@
 <?php
+
+
 function makeWikiWord($itemName) {
 
 
@@ -12,8 +14,19 @@ function makeWikiWord($itemName) {
     return $wikiName;
 }
 function connectDb($db_name = "tasks",$db_user='taskuser') {
+	
+  $db_host = 'brockman';
+  $db_password = 'shopping';
+  if(file_exists('db.ini')) {
+	$ini_hash = parse_ini_file('db.ini');
+	$db_host = $ini_hash['db_host'];
+	$db_user = $ini_hash['db_user'];
+	$db_password = $ini_hash['db_password'];
+	
+	
+  }
   
-  $link = mysql_connect('brockman',$db_user,'shopping');
+  $link = mysql_connect($dbhost,$db_user,'shopping');
 
   mysql_select_db($db_name,$link);
 

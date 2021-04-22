@@ -47,12 +47,15 @@ echo new div('overview.tpl', $params);
 
 
 
-function treeToArray($parent,$ancestors,&$tree_array) {
+function treeToArray($parent,$ancestors,&$tree_array,$indent = " ") {
 	
 	$sql = "SELECT id,label from catTree where parent = $parent";
 	
 	
 	
+	$indent .= "#";
+	
+	print "indent $indent $sql\n";
 	$mysql_result = mysql_query($sql);
 	
 	$ancestors_sub = $ancestors;
@@ -63,9 +66,9 @@ function treeToArray($parent,$ancestors,&$tree_array) {
 	
 	while($data = mysql_fetch_array($mysql_result)) {
 	   list($id,$label) = $data;
-       
+       print "$parent => $id/$label\n";
        $found = 1;
-       treeToArray($id,$ancestors_sub,$tree_array);
+       treeToArray($id,$ancestors_sub,$tree_array,$indent);
 	   
        for($i=0;$i< count($ancestors_sub);$i++) {
 		$ancestors_sub[$i] = ' ';
