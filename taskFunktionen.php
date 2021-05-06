@@ -22,11 +22,11 @@ function connectDb($db_name = "tasks",$db_user='taskuser') {
 	$db_host = $ini_hash['db_host'];
 	$db_user = $ini_hash['db_user'];
 	$db_password = $ini_hash['db_password'];
-	
+	print_r($ini_hash);
 	
   }
   
-  $link = mysql_connect($dbhost,$db_user,'shopping');
+  $link = mysql_connect($db_host,$db_user,'shopping');
 
   mysql_select_db($db_name,$link);
 
