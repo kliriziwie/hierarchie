@@ -26,7 +26,7 @@ function connectDb($db_name = "tasks",$db_user='taskuser') {
 	
   }
   
-  $link = mysql_connect($dbhost,$db_user,'shopping');
+  $link = mysql_connect($db_host,$db_user,'shopping');
 
   mysql_select_db($db_name,$link);
 
