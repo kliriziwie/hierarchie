@@ -793,7 +793,7 @@ class div {
 					if ($exists === true || $decode === true)
 						$items = self::jsonDecode($items);
 					if ($exists === true)
-						break;
+						return;//break;
 				} else {
 					$items = self::jsonDecode($items);
 				}
@@ -2839,7 +2839,7 @@ class div {
 			if (is_object($items)) {
 				$items = get_object_vars($items);
 			} else
-				continue;
+				return;//continue;
 		
 		if ($superkey != "")
 			$superkey .= ".";
@@ -5116,7 +5116,7 @@ class div {
 	 * @param array $memory
 	 * @param array $items
 	 */
-	final private function memory(&$items){
+	private function memory(&$items){
 		$vars = $this->getActiveVars($items);
 		
 		foreach ( $vars as $var )
@@ -5219,7 +5219,7 @@ class div {
 	/**
 	 * Clear location's tags
 	 */
-	final private function clearLocations(){
+	private function clearLocations(){
 		$locations = $this->getLocations();
 		foreach ( $locations as $location => $posis ) {
 			$this->__src = str_replace(DIV_TAG_LOCATION_BEGIN . $location . DIV_TAG_LOCATION_END, '', $this->__src);
@@ -5573,7 +5573,7 @@ class div {
 	 *
 	 * @param integer $checksum
 	 */
-	final private function makeItAgain($checksum, &$items){
+	private function makeItAgain($checksum, &$items){
 		if (self::$__log_mode === true)
 			$this->logger("Making again some remembered tasks...");
 		
@@ -5610,7 +5610,7 @@ class div {
 					$value = self::getVarValue($params['key'], $items);
 					$value = self::anyToStr($value);
 					if (is_null($value))
-						continue;
+						continue 2;//Anpassung
 					$value = self::teaser("{$value}", intval($params['param']));
 					
 					$search = DIV_TAG_REPLACEMENT_PREFIX . $params['modifier'] . $params['key'] . DIV_TAG_SUBMATCH_SEPARATOR . $params['param'] . DIV_TAG_REPLACEMENT_SUFFIX;
@@ -5620,7 +5620,7 @@ class div {
 				case 'replace_submatch_substr' :
 					$value = self::getVarValue($params['key'], $items);
 					if (is_null($value))
-						continue;
+						continue 2;
 					$value = self::anyToStr($value);
 					$this->__src = str_replace($simple . $params['key'] . DIV_TAG_SUBMATCH_SEPARATOR . $params['param'] . DIV_TAG_REPLACEMENT_SUFFIX, $vpx . substr($value, $params['from'], $params['for']) . $vsx, $this->__src);
 					break;
@@ -5628,7 +5628,7 @@ class div {
 				case 'replace_submatch_wordwrap' :
 					$value = self::getVarValue($params['key'], $items);
 					if (is_null($value))
-						continue;
+						continue 2;
 					$value = self::anyToStr($value);
 					$this->__src = str_replace($simple . $params['key'] . DIV_TAG_SUBMATCH_SEPARATOR . $params['param'] . DIV_TAG_REPLACEMENT_SUFFIX, $vpx . wordwrap("{$value}", intval(substr($params['param'], strlen(DIV_TAG_MODIFIER_WORDWRAP))), "\n", 1) . $vsx, $this->__src);
 					break;
@@ -5636,7 +5636,7 @@ class div {
 				case 'replace_submatch_sprintf' :
 					$value = self::getVarValue($params['key'], $items);
 					if (is_null($value))
-						continue;
+						continue 2;
 					$value = self::anyToStr($value);
 					$this->__src = str_replace($simple . $params['key'] . DIV_TAG_SUBMATCH_SEPARATOR . $params['param'] . DIV_TAG_REPLACEMENT_SUFFIX, $vpx . sprintf($params['param'], $value) . $vsx, $this->__src);
 					break;
@@ -5644,7 +5644,7 @@ class div {
 				case 'json_encode' :
 					$value = self::getVarValue($params['key'], $items);
 					if (is_null($value))
-						continue;
+						continue 2;
 					$this->__src = str_replace(DIV_TAG_REPLACEMENT_PREFIX . DIV_TAG_MODIFIER_ENCODE_JSON . $params['key'] . DIV_TAG_REPLACEMENT_SUFFIX, $vpx . self::jsonEncode($value) . $vsx, $this->__src);
 					break;
 				
@@ -5652,7 +5652,7 @@ class div {
 					$value = self::getVarValue($params['key'], $items);
 					
 					if (is_null($value))
-						continue;
+						continue 2;
 					
 					$value = self::anyToStr($value);
 					
@@ -5772,7 +5772,7 @@ class div {
 	/**
 	 * Load properties from template code
 	 */
-	final private function loadTemplateProperties(){
+	private function loadTemplateProperties(){
 		$this->__properties = $this->getTemplateProperties();
 	}
 	
@@ -6355,7 +6355,7 @@ class div {
 	 * @param string $tbegin
 	 * @param string $end
 	 */
-	final private function translateSimpleBlocks($src, $begin, $end, $tbegin, $tend, $separator = "", $tseparator = "", $first = true){
+	private function translateSimpleBlocks($src, $begin, $end, $tbegin, $tend, $separator = "", $tseparator = "", $first = true){
 		$lbegin = strlen($begin);
 		$lend = strlen($end);
 		$lsep = strlen(trim("$separator"));
@@ -6400,7 +6400,7 @@ class div {
 	 * @param string $tend_prefix
 	 * @param string $tend_suffix
 	 */
-	final private function translateKeyBlocks($src, $begin_prefix, $begin_suffix, $end_prefix, $end_suffix, $tbegin_prefix, $tbegin_suffix, $tend_prefix, $tend_suffix){
+	private function translateKeyBlocks($src, $begin_prefix, $begin_suffix, $end_prefix, $end_suffix, $tbegin_prefix, $tbegin_suffix, $tend_prefix, $tend_suffix){
 		$p = 0;
 		while ( true ) {
 			
@@ -7006,7 +7006,7 @@ class div {
 	 * @param mixed $items
 	 * @return string
 	 */
-	final private function subParse_parse($src, $items){
+	private function subParse_parse($src, $items){
 		$tpl = self::getAuxiliaryEngineClone($this->__items);
 		$tpl->__src = $src;
 		$tpl->__src_original = $src;
@@ -7021,7 +7021,7 @@ class div {
 	 * @param mixed $items
 	 * @return string
 	 */
-	final private function subParse_html_wysiwyg($src){
+	private function subParse_html_wysiwyg($src){
 		$l = strlen($src);
 		$newcode = '';
 		for($i = 0; $i < $l; $i ++) {
@@ -7322,7 +7322,8 @@ class div {
 	final static function utf162utf8($utf16){
 		if (function_exists('mb_convert_encoding'))
 			return mb_convert_encoding($utf16, 'UTF-8', 'UTF-16');
-		$bytes = (ord($utf16{0}) << 8) | ord($utf16{1});
+		die("es muss noch gefixt werden");
+		//$bytes = (ord($utf16{0}) << 8) | ord($utf16{1});
 		
 		if ((0x7F & $bytes) == $bytes)
 			return chr(0x7F & $bytes);
@@ -7377,7 +7378,7 @@ class div {
 					for($c = 0; $c < $strlen_chrs; ++ $c) {
 						
 						$substr_chrs_c_2 = substr($chrs, $c, 2);
-						$ord_chrs_c = ord($chrs{$c});
+						$ord_chrs_c = ord($chrs[$c]); //Anpassung
 						
 						switch (true) {
 							case $substr_chrs_c_2 == '\b' :
@@ -7405,7 +7406,7 @@ class div {
 							case $substr_chrs_c_2 == '\\\\' :
 							case $substr_chrs_c_2 == '\\/' :
 								if (($delim == '"' && $substr_chrs_c_2 != '\\\'') || ($delim == "'" && $substr_chrs_c_2 != '\\"'))
-									$utf8 .= $chrs{++ $c};
+									$utf8 .= $chrs[++ $c];
 								break;
 							case preg_match('/\\\u[0-9A-F]{4}/i', substr($chrs, $c, 6)) :
 								$utf16 = chr(hexdec(substr($chrs, ($c + 2), 2))) . chr(hexdec(substr($chrs, ($c + 4), 2)));
@@ -7413,7 +7414,7 @@ class div {
 								$c += 5;
 								break;
 							case ($ord_chrs_c >= 0x20) && ($ord_chrs_c <= 0x7F) :
-								$utf8 .= $chrs{$c};
+								$utf8 .= $chrs[$c];
 								break;
 							case ($ord_chrs_c & 0xE0) == 0xC0 :
 								$utf8 .= substr($chrs, $c, 2);
@@ -7439,7 +7440,7 @@ class div {
 					}
 					return $utf8;
 				} elseif (preg_match('/^\[.*\]$/s', $str) || preg_match('/^\{.*\}$/s', $str)) {
-					if ($str{0} == '[') {
+					if ($str[0] == '[') {
 						$stk = array(
 								3
 						);
@@ -7483,7 +7484,7 @@ class div {
 						$top = end($stk);
 						$substr_chrs_c_2 = substr($chrs, $c, 2);
 						
-						if (($c == $strlen_chrs) || (($chrs{$c} == ',') && ($top['what'] == 1))) {
+						if (($c == $strlen_chrs) || (($chrs[$c] == ',') && ($top['what'] == 1))) {
 							$slice = substr($chrs, $top['where'], ($c - $top['where']));
 							array_push($stk, array(
 									'what' => 1,
@@ -7514,15 +7515,15 @@ class div {
 									}
 								}
 							}
-						} elseif ((($chrs{$c} == '"') || ($chrs{$c} == "'")) && ($top['what'] != 2)) {
+						} elseif ((($chrs[$c] == '"') || ($chrs[$c] == "'")) && ($top['what'] != 2)) {
 							array_push($stk, array(
 									'what' => 2,
 									'where' => $c,
-									'delim' => $chrs{$c}
+									'delim' => $chrs[$c]
 							));
-						} elseif (($chrs{$c} == $top['delim']) && ($top['what'] == 2) && ((strlen(substr($chrs, 0, $c)) - strlen(rtrim(substr($chrs, 0, $c), '\\'))) % 2 != 1)) {
+						} elseif (($chrs[$c] == $top['delim']) && ($top['what'] == 2) && ((strlen(substr($chrs, 0, $c)) - strlen(rtrim(substr($chrs, 0, $c), '\\'))) % 2 != 1)) {
 							array_pop($stk);
-						} elseif (($chrs{$c} == '[') && in_array($top['what'], array(
+						} elseif (($chrs[$c] == '[') && in_array($top['what'], array(
 								1,
 								3,
 								4
@@ -7532,9 +7533,9 @@ class div {
 									'where' => $c,
 									'delim' => false
 							));
-						} elseif (($chrs{$c} == ']') && ($top['what'] == 3)) {
+						} elseif (($chrs[$c] == ']') && ($top['what'] == 3)) {
 							array_pop($stk);
-						} elseif (($chrs{$c} == '{') && in_array($top['what'], array(
+						} elseif (($chrs[$c] == '{') && in_array($top['what'], array(
 								1,
 								3,
 								4
@@ -7544,7 +7545,7 @@ class div {
 									'where' => $c,
 									'delim' => false
 							));
-						} elseif (($chrs{$c} == '}') && ($top['what'] == 4)) {
+						} elseif (($chrs[$c] == '}') && ($top['what'] == 4)) {
 							array_pop($stk);
 						} elseif (($substr_chrs_c_2 == '/*') && in_array($top['what'], array(
 								1,

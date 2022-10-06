@@ -9,7 +9,7 @@
 <h2>{$leaveTitle}({$leaveID})</h2>
 
 
-<form>
+<form action="oneLeave.php">
   <li>
 
    <table>

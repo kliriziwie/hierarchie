@@ -70,6 +70,14 @@
 					targetId = this.getItem(this.getPath(e.targetNode)).id;
 					console.log(targetId);
 					
+					sourceKind = this.getItem(this.getPath(e.sourceNode)).kind;
+					console.log("sourcekind: "+sourceKind);
+					
+					targetKind = this.getItem(this.getPath(e.targetNode)).kind;
+					
+					
+					console.log("targetKind: "+targetKind);
+					
                     var valid = e.valid;
                     if (!valid) {
                         // if not valid, it means something different than a tree node
@@ -81,16 +89,34 @@
                     }
                     if (valid) {
                         if (e.sourceNode) {
-                            // dropping a treeview node - move it
-                            this.append(e.sourceNode, e.targetNode);
-							$.ajax({
-                                url: "updateTree.php",
-								data: {"sourceId": sourceId, "targetId": targetId}
-                            }).done(function (data) {
+							
+							if(sourceKind  == "category"  && targetKind == "category") {
+								console.log("Moving Category");
+                                // dropping a treeview node - move it
+                                this.append(e.sourceNode, e.targetNode);
+							    $.ajax({
+                                    url: "updateTree.php",
+								    data: {"sourceId": sourceId, "targetId": targetId}
+                                }).done(function (data) {
                                
-                            }).fail(function () {
+                                }).fail(function () {
                                 
-                            });
+                                });
+						    } else if(sourceKind == "leave" && targetKind == "category") {
+								console.log("Monving Leave");
+								 this.append(e.sourceNode, e.targetNode);
+							    $.ajax({
+                                    url: "updateLeave.php",
+								    data: {"sourceId": sourceId, "targetId": targetId}
+                                }).done(function (data) {
+                               
+                                }).fail(function () {
+                                
+                                });
+								
+						    } else {
+								console.log("Mving Nothing");
+						    }
                         }
                         else {
                             // dragging a doc item - insert a new one

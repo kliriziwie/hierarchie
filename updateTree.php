@@ -44,5 +44,5 @@ if(empty($targetId)) {
 
 $sql = "UPDATE catTree SET Parent =$targetId WHERE id = $sourceId";
 
-mysql_query($sql);
+mysqli_query($link,$sql);
 

@@ -7,6 +7,9 @@ include "taskFunktionen.php";
 session_start();
 
 
+print "es wird aufgerufen";
+
+
 $link = connectDb("hierarchie","hierarchieuser");
 if(empty($link)) {
   die("no connection");
@@ -19,6 +22,8 @@ $myGlobals = array(
 		   "leaveDescription" => "",
 		   "action"      => ""
 	  );
+
+print_r($_REQUEST);
 
 
 foreach ($myGlobals as $key => $value) {
@@ -34,19 +39,23 @@ foreach ($myGlobals as $key => $value) {
 #print_r($myGlobals);
 
 
+
+
 if(!empty($action)) {
+	
+	print "action $action\n";
 
   if($action == "update") {
 #  print "action $action";
-    if($_SESSION['handle'] ) {
+    if(true or $_SESSION['handle'] ) {
       
       $sql = "update leaveTable SET  title= '$leaveTitle', description='$leaveDescription' where leave_id = $leaveID";
 print $sql;
       
-    $result = mysql_query($sql);
+    $result = mysqli_query($link,$sql);
     
 # print "result $result";
-   print mysql_error();
+   print mysqli_error($link);
 
     $_SESSION['handle']  = 0;
     } else {
@@ -65,11 +74,11 @@ print $sql;
 
 if(!empty($leaveID)) {
 
-  $sql = "select title,description from leaveTable where leave_id = $leaveID";
+  $sql = "select title,description,cat from leaveTable where leave_id = $leaveID";
 
   print $sql;
 
-  list($leaveTitle,$leaveDescription) = getOneArray($sql);
+  list($leaveTitle,$leaveDescription,$parentID) = getOneArray($sql);
 
   $sql = "select label from catTree where id = $parentID";
   $parentLabel = getOne($sql);

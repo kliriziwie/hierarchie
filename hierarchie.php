@@ -18,6 +18,7 @@ $myGlobals = array(
 		   "newCat"      => 0,
 		   "grandparentLabel" => "",
                    "grandparentID"    => 0,
+		   "description" => ""
 	  );
 
 
@@ -43,15 +44,20 @@ if(!empty($action)) {
       $sql = "INSERT INTO catTree SET label = '$newCat', parent=$parentID";
 #print $sql;
       
-    $result = mysql_query($sql);
+    $result = mysqli_query($link,$sql);
     
 # print "result $result";
-#    print mysql_error();
+#    print mysqlii_error();
 
     $_SESSION['handle']  = 0;
     } else {
 #    print "no handle";
     }
+  } else if ($action == "edit"){
+	  $sql = "update catTree set label = '$parentLabel',description='$description' where id = $parentID";
+	  print $sql;
+	  $result = mysqli_query($link,$sql);
+	  
   } else {
     $_SESSION['handle'] = 1;
 
@@ -62,14 +68,15 @@ if(!empty($action)) {
 
  }
 
+$ancestors = array();
 
 if(!empty($parentID)) {
 
-  $sql = "select parent,label from catTree where id = $parentID";
+  $sql = "select parent,label,description from catTree where id = $parentID";
 
   #print $sql;
 
-  list($grandparentID,$parentLabel) = getOneArray($sql);
+  list($grandparentID,$parentLabel,$description) = getOneArray($sql);
 
 
   $sql = "select label from catTree where id = $grandparentID";
@@ -80,6 +87,8 @@ if(!empty($parentID)) {
 
   
   $ancestors = getAncestors($parentID);
+  
+  
 
 
   /*$ancestor_array = array();
@@ -102,18 +111,18 @@ $sql = "select id, label from catTree where parent = $parentID";
 #print "$query";
 
 $items = array();
-$result = mysql_query($sql);
+$result = mysqli_query($link,$sql);
 
 if($result) {
 
-  while($row = mysql_fetch_row($result)) {
+  while($row = mysqli_fetch_row($result)) {
     list($id,$label) = $row;
     
     $items[] = array("id"    => $id,
 		     "label" => $label);
   }
  } else {
-  print mysql_error();
+  print mysqli_error();
  }
 
 
@@ -122,6 +131,7 @@ if($result) {
 $params = array("items"    => $items,
                 "handle"          => $_SESSION['handle'],
 		"parentLabel"     => $parentLabel,
+		"description"     => $description,
                 "parentID"              => $parentID,
 		"link"            => $PHP_SELF,
 		"grandparentID"   => $grandparentID,

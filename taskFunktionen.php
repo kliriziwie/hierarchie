@@ -14,6 +14,7 @@ function makeWikiWord($itemName) {
     return $wikiName;
 }
 function connectDb($db_name = "tasks",$db_user='taskuser') {
+	global $link;
 	
   $db_host = 'brockman';
   $db_password = 'shopping';
@@ -26,24 +27,24 @@ function connectDb($db_name = "tasks",$db_user='taskuser') {
 	
   }
   
-  $link = mysql_connect($db_host,$db_user,'shopping');
+  $link = mysqli_connect($db_host,$db_user,'shopping');
 
-  mysql_select_db($db_name,$link);
+  mysqli_select_db($link,$db_name);
 
   return $link;
 
 }
 function getTime($itemID,$endDate=0) {
-  
+  global $link;
   $query = "select itemDuration,succID FROM liste WHERE itemID=".$itemID;
 
   if($endDate) {
     $query .= " AND actionTime <= '".$endDate."'";
   }
 print $query ."<br>";
-  $result = mysql_query($query);
+  $result = mysqli_query($link,$query);
 
-  $data = mysql_fetch_row($result);
+  $data = mysqli_fetch_row($result);
   list($itemDuration,$succID) = $data;
 
   
@@ -58,13 +59,13 @@ print $query ."<br>";
 }
 
 function getOneArray($sql) {
+  global $link;
 
-
-  $result = mysql_query($sql);
+  $result = mysqli_query($link,$sql);
   if(!$result) {
     print $sql."<br>";
   }
-  $array = mysql_fetch_row($result);
+  $array = mysqli_fetch_row($result);
 
   return $array;
 
@@ -74,13 +75,13 @@ function getOneArray($sql) {
 
 function getOneRow($sql) {
 
-
-  $result = mysql_query($sql);
+  global $link;
+  $result = mysqli_query($link,$sql);
   if(!$result) {
     print $sql."<br>";
   }
 #print $sql."<br>";
-  $array = mysql_fetch_assoc($result);
+  $array = mysqli_fetch_assoc($result);
 
   return $array;
 
@@ -102,12 +103,22 @@ function computeCurrentDueTime($taskID,$taskPeriod) {
 }
 
 function getOne($sql) {
-  $result = mysql_query($sql);
+	global $link;
+  $result = mysqli_query($link,$sql);
   if(empty($result)) {
     print($sql);
   }
-  $array = mysql_fetch_row($result);
-  return $array[0];
+  $array = mysqli_fetch_row($result);
+  
+  /* print $sql;
+  print_r($array);
+  print "<br>"; */
+	if(is_array($array)) {
+		return $array[0];
+	} else {
+		
+		return null;
+	}
 
 }
 

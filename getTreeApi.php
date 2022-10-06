@@ -28,11 +28,11 @@ foreach ($myGlobals as $key => $value) {
 
 $sql = "select id,label from catTree where parent=$parentID";
 
-$mysql_result = mysql_query($sql);
+$mysql_result = mysqli_query($link, $sql);
 
 $result = array();
 	
-while($data = mysql_fetch_array($mysql_result)) {
+while($data = mysqli_fetch_array($mysql_result)) {
 	list($id,$label) = $data;
 	
 	$sql = "select count(*) from catTree where parent=$id";
@@ -41,6 +41,19 @@ while($data = mysql_fetch_array($mysql_result)) {
 	$hasChildren = false; 
 	
 	if($count) {
+		$hasChildren = true;
+    }
+	
+	
+	$sql = "select count(*)  from leaveTable where cat = $id ";
+	
+	
+
+   
+
+     $count = getOne($sql);
+	 
+	 if($count) {
 		$hasChildren = true;
     }
 	
@@ -54,10 +67,37 @@ while($data = mysql_fetch_array($mysql_result)) {
 		"id" => $id,
 		"href" => "hierarchie.php?parentID=$id",
 		"target" => "_blank",
+		"kind" => "category",
 		);
 		
     array_push($result,$row);
 	
 }
+
+$sql = "select count(*)  from leaveTable where cat = $parentID";
+
+
+
+$count = getOne($sql);
+
+if($count) {
+	$row = array(
+	    //"text" => $label,
+		"Name" => "Bl&auml;tter",
+		"ChildrenUrl" => "getLeaveApi.php?parentID=$parentID",
+		"HasChildren" => "true",
+		"id" => $parentID,
+		"href" => "leave.php?parentID=$parentID&action=Blätter",
+		"target" => "_blank",
+		"kind" => "category",
+		);
+	array_push($result,$row);
+}
+
+
+
+
+
+
 
 print json_encode($result);
