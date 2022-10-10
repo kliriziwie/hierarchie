@@ -28,11 +28,11 @@ foreach ($myGlobals as $key => $value) {
 
 $sql = "select id,label from catTree where parent=$parentID";
 
-$mysql_result = mysqli_query($link, $sql);
+$mysql_result = sql_query($link, $sql);
 
 $result = array();
 	
-while($data = mysqli_fetch_array($mysql_result)) {
+while($data = sql_fetch_array($mysql_result)) {
 	list($id,$label) = $data;
 	
 	$sql = "select count(*) from catTree where parent=$id";

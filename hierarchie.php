@@ -44,10 +44,9 @@ if(!empty($action)) {
       $sql = "INSERT INTO catTree SET label = '$newCat', parent=$parentID";
 #print $sql;
       
-    $result = mysqli_query($link,$sql);
+    $result = sql_query($link,$sql);
     
-# print "result $result";
-#    print mysqlii_error();
+
 
     $_SESSION['handle']  = 0;
     } else {
@@ -56,7 +55,7 @@ if(!empty($action)) {
   } else if ($action == "edit"){
 	  $sql = "update catTree set label = '$parentLabel',description='$description' where id = $parentID";
 	  print $sql;
-	  $result = mysqli_query($link,$sql);
+	  $result = sql_query($link,$sql);
 	  
   } else {
     $_SESSION['handle'] = 1;
@@ -111,18 +110,18 @@ $sql = "select id, label from catTree where parent = $parentID";
 #print "$query";
 
 $items = array();
-$result = mysqli_query($link,$sql);
+$result = sql_query($link,$sql);
 
 if($result) {
 
-  while($row = mysqli_fetch_row($result)) {
+  while($row = sql_fetch_row($result)) {
     list($id,$label) = $row;
     
     $items[] = array("id"    => $id,
 		     "label" => $label);
   }
  } else {
-  print mysqli_error();
+  print sql_error();
  }
 
 

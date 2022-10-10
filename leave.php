@@ -42,10 +42,10 @@ if(!empty($action)) {
       $sql = "INSERT INTO leaveTable SET  title= '$newLeaveTitle', description='$newLeaveDescription',cat=$parentID";
 
       
-    $result = mysqli_query($link,$sql);
+    $result = sql_query($link,$sql);
     
 # print "result $result";
-   print mysqli_error($link);
+   print sql_error($link);
 
     $_SESSION['handle']  = 0;
     } else {
@@ -80,11 +80,11 @@ $sql = "select leave_id,title,description from leaveTable where cat = $parentID"
 #print "$query";
 
 $items = array();
-$result = mysqli_query($link,$sql);
+$result = sql_query($link,$sql);
 
 if($result) {
 
-  while($row = mysqli_fetch_row($result)) {
+  while($row = sql_fetch_row($result)) {
     list($leave_id,$title, $description) = $row;
     
     $items[] = array("leave_id"    => $leave_id,
@@ -93,7 +93,7 @@ if($result) {
    );
   }
  } else {
-  print mysqli_error();
+  print sql_error();
  }
 
 

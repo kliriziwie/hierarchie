@@ -52,10 +52,10 @@ if(!empty($action)) {
       $sql = "update leaveTable SET  title= '$leaveTitle', description='$leaveDescription' where leave_id = $leaveID";
 print $sql;
       
-    $result = mysqli_query($link,$sql);
+    $result = sql_query($link,$sql);
     
 # print "result $result";
-   print mysqli_error($link);
+   print sql_error($link);
 
     $_SESSION['handle']  = 0;
     } else {
