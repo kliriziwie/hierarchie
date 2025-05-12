@@ -39,7 +39,7 @@ if(!empty($action)) {
 #  print "action $action";
     if( true or $_SESSION['handle'] ) {
       
-      $sql = "INSERT INTO leaveTable SET  title= '$newLeaveTitle', description='$newLeaveDescription',cat=$parentID";
+      $sql = "INSERT INTO leaveTable SET  title= '$newLeaveTitle', description='".AddSlashes($newLeaveDescription)."',cat=$parentID";
 
       
     $result = sql_query($link,$sql);
@@ -97,12 +97,13 @@ if($result) {
  }
 
 
-
+$ancestor_string = getAncestorString($parentID);
 
 $params = array("items"    => $items,
                 "handle"          => $_SESSION['handle'],
 		"parentLabel"     => $parentLabel,
                 "parentID"              => $parentID,
+                "ancestor_string" => $ancestor_string,
      );
 
 #print_r($params);

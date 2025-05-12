@@ -1,7 +1,7 @@
 <html>
 
 <head>
- <title>Hierarchie der Gedanken</title>
+ <title>{$ancestor_string}</title>
 </head>
 <body>
 
@@ -11,7 +11,9 @@
     <form>
          <input style="height:100;width:100;bg-color:green" type="submit" name="action" value="edit"/> 
          <input name="parentLabel" value="{$parentLabel}"></input>
-		 <input name="description" value="{$description}" size="100"></input>
+		 <textarea name="description" rows="10" cols>{$description}</textarea>
+                 
+                 Old <input name="old" type="checkbox" value="1" {$oldFlag} >
 		 
 		 <input type="hidden" name="parentID" value="{$parentID}">
     

@@ -8,7 +8,9 @@
                <a href="oneLeave.php?leaveID={$leave_id}">{$title}</a>
             </td>
 			<td>
+                            <pre>
 			   {$description}
+                            </pre>
 			</td>
         </tr>
 [/$items]

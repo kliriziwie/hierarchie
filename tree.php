@@ -6,16 +6,15 @@
     <link id="themecss" rel="stylesheet" type="text/css" href="//www.shieldui.com/shared/components/latest/css/light/all.min.css" />
     <script type="text/javascript" src="//www.shieldui.com/shared/components/latest/js/jquery-1.11.1.min.js"></script>
     <script type="text/javascript" src="//www.shieldui.com/shared/components/latest/js/shieldui-all.min.js"></script>
+     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.1/css/all.css" integrity="sha384-v8BU367qNbs/aIZIxuivaU55N5GPF89WBerHoGA4QTcbUjYiLQtKdrfXnqAcXyTv" crossorigin="anonymous">
+
 </head>
 <body class="theme-light">
 <!-- <link rel="stylesheet" href="http://demos.shieldui.com//Content/fonts/font-awesome/css/font-awesome.min.css" />-->
 <div class="container">
     <div id="treeview"></div>
     <div class="tag-container">
-        <span class="doc-item">Maintenance</span>
-        <span class="doc-item">Support</span>
-        <span class="doc-item">Tools</span>
-        <span id="trashCan" class="fa fa-trash item-trash">Trash</span>
+        <span id="trashCan" class="fa fa-trash item-trash"></span>
     </div>
 </div>
 <script type="text/javascript">
@@ -32,7 +31,7 @@
                             // if no extra params provided, it means
                             // this is a read for the top level item
                             $.ajax({
-                                url: "getTreeApi.php"
+                                url: "getTreeApi.php?old=<?php echo(isset($_REQUEST['old'])?$_REQUEST['old']:0);?>"
                             }).done(function (data) {
 								console.log("Hier kommt der Success");
                                 success(data, false, extra);

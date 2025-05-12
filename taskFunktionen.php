@@ -1,5 +1,51 @@
 <?php
 
+function getAncestorString($id) {
+    
+    $ancestors = getAncestors($id);
+
+    $ancestor_array = [];
+
+    array_shift($ancestors);
+
+    foreach ($ancestors as $ancestor) {
+        $ancestor_array[] = $ancestor['label'];
+    }
+
+    return implode("=>", $ancestor_array);
+    
+}
+
+function getAncestors($id) {
+
+
+
+    $sql = "SELECT label from catTree where id = $id";
+
+    $label = getOne($sql);
+
+    if (empty($label)) {
+        $label = 'root';
+    }
+
+    $pair = array('id' => $id,
+        'label' => $label);
+
+    if ($id == 0) {
+        return array($pair);
+    } else {
+
+        $sql = "SELECT parent FROM catTree where id=$id";
+        $parentID = getOne($sql);
+
+        $ancestors = getAncestors($parentID);
+
+        array_push($ancestors, $pair);
+
+        return $ancestors;
+    }
+}
+
 function makeWikiWord($itemName) {
 
 
@@ -211,8 +257,6 @@ function sql_fetch_row($mysql_result) {
 }
 
 function sql_error($link) {
-    return use_mysqli()
-         ? mysqli_error($link)
-         : mysql_error()
-         ;
+    return use_mysqli() ? mysqli_error($link) : mysql_error()
+    ;
 }

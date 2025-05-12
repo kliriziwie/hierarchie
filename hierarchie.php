@@ -18,7 +18,8 @@ $myGlobals = array(
 		   "newCat"      => 0,
 		   "grandparentLabel" => "",
                    "grandparentID"    => 0,
-		   "description" => ""
+		   "description" => "",
+                   "old"         => 0,
 	  );
 
 
@@ -53,7 +54,11 @@ if(!empty($action)) {
 #    print "no handle";
     }
   } else if ($action == "edit"){
-	  $sql = "update catTree set label = '$parentLabel',description='$description' where id = $parentID";
+          
+	  $sql = "update catTree set label = '$parentLabel',description='$description' ";
+          $sql .=" ,old=$old ";
+          $sql .= " where id = $parentID";
+          
 	  print $sql;
 	  $result = sql_query($link,$sql);
 	  
@@ -69,18 +74,27 @@ if(!empty($action)) {
 
 $ancestors = array();
 
+$oldFlag = "";
+
 if(!empty($parentID)) {
 
-  $sql = "select parent,label,description from catTree where id = $parentID";
+  $sql = "select parent,label,description,old from catTree where id = $parentID";
 
   #print $sql;
 
-  list($grandparentID,$parentLabel,$description) = getOneArray($sql);
+  list($grandparentID,$parentLabel,$description,$old) = getOneArray($sql);
+  
+  if($old) {
+      $oldFlag = "checked";
+      print " es ist alt";
+  } else {
+      print " es ist nicht alt";
+  }
 
 
   $sql = "select label from catTree where id = $grandparentID";
 
-#  print $sql;
+  #print $sql;
 
   $grandparentLabel = getOne($sql);
 
@@ -124,6 +138,7 @@ if($result) {
   print sql_error();
  }
 
+ $ancestor_string = getAncestorString($parentID);
 
 
 
@@ -136,45 +151,15 @@ $params = array("items"    => $items,
 		"grandparentID"   => $grandparentID,
 		"grandparentLabel" => $grandparentLabel,
 		"ancestors" => $ancestors,
+                "oldFlag" => $oldFlag,
+                 "ancestor_string" => $ancestor_string,
      );
 
 #print_r($params);
 
 echo new div('hierarchie.tpl', $params);
 
-function getAncestors($id) {
-  
-  
 
-  $sql = "SELECT label from catTree where id = $id";
-
-
-  $label = getOne($sql);
-  
-  if(empty($label)) {
-	  $label = 'root';
-  }
-
-  $pair = array('id' => $id,
-                'label' => $label);
-
-  if($id == 0) {
-    return array($pair);
-
-  } else {
-    
-	$sql = "SELECT parent FROM catTree where id=$id";
-    $parentID = getOne($sql);
-	
-    $ancestors = getAncestors($parentID);
-
-    array_push($ancestors,$pair);
-
-    return $ancestors;
-
-  }
-
-}
 
 
  

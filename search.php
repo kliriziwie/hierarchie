@@ -45,7 +45,7 @@ if($result) {
 	$items[] = array(
 	      'leave_id' => $leave_id,
 		  'title' => $title,
-		  'description' => $description,
+		  'description' => htmlentities($description),
 		  );
 	
 	

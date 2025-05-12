@@ -44,5 +44,5 @@ if(empty($targetId)) {
 
 $sql = "UPDATE leaveTable SET cat =$targetId WHERE leave_id = $sourceId";
 
-mysql_query($sql);
+mysqli_query($link, $sql);
 
